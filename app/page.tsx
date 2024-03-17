@@ -1,10 +1,14 @@
 //page.tsx
 import React from "react";
+import Stopwatch from "@/components/Stopwatch";
 
 const IndexPage = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center px-4">
       <div className="bg-white shadow-2xl rounded-2xl p-10 m-4 w-full max-w-4xl space-y-6">
+        {/* TODO : move it to second page after it created  */}
+
+        <Stopwatch />
         <h1 className="text-5xl font-bold text-center text-gray-800">
           Welcome to Tile Match Game
         </h1>
