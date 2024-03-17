@@ -34,11 +34,22 @@ const StopWatch: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="flex items-center space-x-4">
+      <button
+        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none"
+        onClick={startStopwatch}
+      >
+        {isRunning ? "Stop" : "Start"}
+      </button>
       <h1>Stopwatch</h1>
       <p>{formatTime(time)}</p>
-      <button onClick={startStopwatch}>{isRunning ? "Stop" : "Start"}</button>
-      <button onClick={resetStopwatch}>Reset</button>
+
+      <button
+        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none"
+        onClick={resetStopwatch}
+      >
+        Reset
+      </button>
     </div>
   );
 };

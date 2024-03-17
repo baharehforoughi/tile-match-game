@@ -1,14 +1,20 @@
-//page.tsx
+//index.tsx
+"use client";
+
 import React from "react";
-import Stopwatch from "@/components/Stopwatch";
+import { useRouter } from "next/navigation";
 
 const IndexPage = () => {
+  const router = useRouter();
+
+  // Function to handle button click and navigate to the game page 'Start New Game'
+  const startGame = () => {
+    router.push("/game"); // Use router.push to navigate to the game page from welcome page
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center px-4">
       <div className="bg-white shadow-2xl rounded-2xl p-10 m-4 w-full max-w-4xl space-y-6">
-        {/* TODO : move it to second page after it created  */}
-
-        <Stopwatch />
         <h1 className="text-5xl font-bold text-center text-gray-800">
           Welcome to Tile Match Game
         </h1>
@@ -42,7 +48,10 @@ const IndexPage = () => {
             gaming landscape.
           </p>
         </div>
-        <button className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-800 transition duration-300">
+        <button
+          onClick={startGame} // Set the onClick handler to the startGame function
+          className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-800 transition duration-300"
+        >
           Start New Game
         </button>
       </div>

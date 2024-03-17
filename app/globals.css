@@ -31,3 +31,66 @@ body {
     text-wrap: balance;
   }
 }
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin-right: 20px;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.buttons button {
+  margin: 0 5px;
+}
+
+.timer {
+  padding: 5px;
+  border: 1px solid #000;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 10px;
+}
+
+.tile {
+  background-color: #fff;
+  border: 1px solid #000;
+  aspect-ratio: 1;
+  /* height can be adjusted here */
+  height: 80px;
+}
+
+.tile.flipped {
+  /* Two example colors so far, adjust as needed */
+  background-color: var(--tile-color, #8c8cff);
+}
+
+/* Custom properties for tile colors */
+.tile:nth-child(1),
+.tile:nth-child(6),
+.tile:nth-child(11),
+.tile:nth-child(16) {
+  --tile-color: #8c8cff; /* Purple */
+}
+
+.tile:nth-child(2),
+.tile:nth-child(7) {
+  --tile-color: #ffff8c; /* Yellow */
+}
+
+/* To split the gameboard into 2 sides for game and scoreboard*/
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
