@@ -24,6 +24,7 @@ export default function MemoryGame() {
   const [cards, setCards] = React.useState<string[]>(generateDeck());
   const [flipped, setFlipped] = React.useState<number[]>([]);
   const [solved, setSolved] = React.useState<number[]>([]);
+  const [gameStarted, setGameStarted] = useState(false);
 
   useEffect(() => {
     const checkForMatch = () => {
@@ -49,21 +50,20 @@ export default function MemoryGame() {
     setFlipped(allIndices);
     setTimeout(() => {
       setFlipped([]);
-    }, 1500);
+    }, 2000);
+    setGameStarted(true);
   };
   const gameOver = solved.length === cards.length;
+
   const resetGame = () => {
     setCards(generateDeck());
     setFlipped([]);
     setSolved([]);
+    setGameStarted(false);
   };
 
   return (
     <div className="text-center user-select-none select-none ">
-      <h1>
-        Memory Game
-        {/* <Stopwatch /> */}
-      </h1>
       {gameOver && <h2 className="p-5">You WON!</h2>}
       <div className="grid grid-cols-4 gap-5 mt-5 bg-gray-300 p-5">
         {cards.map((card, index) => (
@@ -95,7 +95,13 @@ export default function MemoryGame() {
       >
         Restart
       </button>
-      <button onClick={startGame} className="p-2 bg-slate-200 rounded-md mt-5">
+      <button
+        onClick={startGame}
+        className={`p-2 bg-slate-200 rounded-md mt-5 ${
+          gameStarted ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+        disabled={gameStarted}
+      >
         Start Game
       </button>
     </div>
