@@ -17,7 +17,7 @@ const GamePage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100 p-4">
+    <div className="flex justify-center items-center h-screen bg-gray-100 p-4 user-select-none select-none">
       <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center space-y-4">
         <div className="flex justify-start space-x-2">
           <Stopwatch />

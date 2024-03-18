@@ -59,7 +59,7 @@ export default function MemoryGame() {
   };
 
   return (
-    <div className="text-center ">
+    <div className="text-center user-select-none select-none ">
       <h1>
         Memory Game
         {/* <Stopwatch /> */}
