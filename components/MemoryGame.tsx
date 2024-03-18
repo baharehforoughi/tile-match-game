@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 import { useEffect } from "react";
 import Stopwatch from "./Stopwatch";
+import { useState } from "react";
 
 const generateDeck = () => {
   const memoryCards = [
@@ -43,7 +44,13 @@ export default function MemoryGame() {
       setFlipped([...flipped, index]);
     }
   };
-
+  const startGame = () => {
+    const allIndices = Array.from(Array(cards.length).keys());
+    setFlipped(allIndices);
+    setTimeout(() => {
+      setFlipped([]);
+    }, 1500);
+  };
   const gameOver = solved.length === cards.length;
   const resetGame = () => {
     setCards(generateDeck());
@@ -82,8 +89,14 @@ export default function MemoryGame() {
           </div>
         ))}
       </div>
-      <button onClick={resetGame} className="p-5 bg-slate-500 rounded-md mt-5">
+      <button
+        onClick={resetGame}
+        className="p-2 bg-slate-200 rounded-md mt-5 mr-5"
+      >
         Restart
+      </button>
+      <button onClick={startGame} className="p-2 bg-slate-200 rounded-md mt-5">
+        Start Game
       </button>
     </div>
   );
