@@ -1,10 +1,8 @@
 "use client";
 import Image from "next/image";
 
-import React from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Stopwatch from "./Stopwatch";
-import { useState } from "react";
 
 const generateDeck = () => {
   const memoryCards = [
@@ -30,6 +28,14 @@ export default function MemoryGame({ onGameWin }: MemoryGameProps) {
   const [flipped, setFlipped] = React.useState<number[]>([]);
   const [solved, setSolved] = React.useState<number[]>([]);
   const [gameStarted, setGameStarted] = useState(false);
+
+  const gameOver = solved.length === cards.length;
+
+  useEffect(() => {
+    if (gameOver) {
+      onGameWin();
+    }
+  }, [gameOver, onGameWin]);
 
   useEffect(() => {
     const checkForMatch = () => {
@@ -59,7 +65,6 @@ export default function MemoryGame({ onGameWin }: MemoryGameProps) {
     }, 2000);
     setGameStarted(true);
   };
-  const gameOver = solved.length === cards.length;
 
   const resetGame = () => {
     setCards(generateDeck());

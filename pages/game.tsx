@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MemoryGame from "@/components/MemoryGame";
 import Scoreboard from "@/components/Scoreboard";
 import Stopwatch from "@/components/Stopwatch";
@@ -72,6 +72,8 @@ const GamePage = () => {
         </div>
         <div className="container">
           <MemoryGame onGameWin={handleGameWin} />
+        </div>
+        <div>
           {showPopup && (
             <GameWinPopup
               score={score}
