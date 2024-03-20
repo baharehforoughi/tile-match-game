@@ -20,7 +20,12 @@ const generateDeck = () => {
   const deck = [...memoryCards, ...memoryCards];
   return deck.sort(() => Math.random() - 0.5);
 };
-export default function MemoryGame() {
+
+interface MemoryGameProps {
+  onGameWin: () => void;
+}
+
+export default function MemoryGame({ onGameWin }: MemoryGameProps) {
   const [cards, setCards] = React.useState<string[]>(generateDeck());
   const [flipped, setFlipped] = React.useState<number[]>([]);
   const [solved, setSolved] = React.useState<number[]>([]);
@@ -30,13 +35,13 @@ export default function MemoryGame() {
     const checkForMatch = () => {
       const [first, second] = flipped;
       if (cards[first] === cards[second]) {
-        setSolved([...solved, ...flipped]);
+        setSolved((prevSolved) => [...prevSolved, first, second]);
       }
       setFlipped([]);
     };
 
     if (flipped.length === 2) {
-      setTimeout(() => checkForMatch(), 1000);
+      setTimeout(checkForMatch, 1000);
     }
   }, [cards, flipped, solved]);
 
@@ -45,6 +50,7 @@ export default function MemoryGame() {
       setFlipped([...flipped, index]);
     }
   };
+
   const startGame = () => {
     const allIndices = Array.from(Array(cards.length).keys());
     setFlipped(allIndices);
