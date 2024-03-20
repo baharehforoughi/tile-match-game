@@ -3,6 +3,9 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import BaharehLinkedInQR from "/public/LinkedInScanable/BaharehLinkedIn.png";
+import LeeLinkedInQR from "/public/LinkedInScanable/LeeLinkedIn.png";
+import Image from "next/image";
 
 const IndexPage = () => {
   const router = useRouter();
@@ -40,7 +43,44 @@ const IndexPage = () => {
           </p>
         </div>
         <div className="bg-indigo-100 p-6 rounded-lg shadow-lg">
-          <p className="text-md text-gray-700">
+          <h2 className="font-bold text-md text-gray-700">
+            Meet the developers:
+          </h2>
+          <br></br>
+          <div className="flex justify-between items-center space-x-4">
+            <div className="flex-1">
+              <h3>Bahareh Foroughi</h3>
+              <a
+                href="https://www.linkedin.com/in/bhrforoughi/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={BaharehLinkedInQR.src}
+                  alt="Bahareh's LinkedIn QR Code"
+                  width={125}
+                  height={75}
+                />
+              </a>
+            </div>
+
+            <div className="flex-1">
+              <h3>Lee-Anne van der Merwe</h3>
+              <a
+                href="https://www.linkedin.com/in/lee-anne-van-der-merwe/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={LeeLinkedInQR.src}
+                  alt="Lee-Anne's LinkedIn QR Code"
+                  width={125}
+                  height={75}
+                />
+              </a>
+            </div>
+          </div>
+          <p className="text-md text-gray-700 mt-4">
             From conception to execution, every aspect of this app represents
             our commitment to excellence and our drive to push the boundaries of
             whats possible in the world of game development. Join us on this
@@ -49,7 +89,7 @@ const IndexPage = () => {
           </p>
         </div>
         <button
-          onClick={startGame} // Set the onClick handler to the startGame function
+          onClick={startGame}
           className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-800 transition duration-300"
         >
           Start New Game
