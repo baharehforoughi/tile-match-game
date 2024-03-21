@@ -1,24 +1,36 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 interface ScoreboardProps {
-  scores: { name: string; score: number }[];
   setStartTime: Dispatch<SetStateAction<Date | null>>;
 }
 
-const Scoreboard: React.FC<ScoreboardProps> = ({ scores, setStartTime }) => {
-  // State to keep track of the index of the most recently added score
+const Scoreboard: React.FC<ScoreboardProps> = ({ setStartTime }) => {
+  const [scores, setScores] = useState<{ name: string; score: number }[]>([]);
   const [latestScoreIndex, setLatestScoreIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    // Assuming the latest score is always added at the end of the scores array
-    if (scores.length > 0) {
-      setLatestScoreIndex(scores.length - 1); // Update to the index of the new score
+    const fetchScores = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/user");
+        if (!response.ok) {
+          throw new Error("Failed to fetch scores");
+        }
+        const data = await response.json();
+        setScores(data);
+      } catch (error) {
+        console.error("Error fetching scores:", error);
+      }
+    };
 
-      // Reset latestScoreIndex after 5 seconds
+    fetchScores();
+  }, []);
+
+  useEffect(() => {
+    if (scores.length > 0) {
+      setLatestScoreIndex(scores.length - 1);
       const timer = setTimeout(() => {
         setLatestScoreIndex(null);
       }, 5000);
-
       return () => clearTimeout(timer);
     }
   }, [scores]);
@@ -26,8 +38,8 @@ const Scoreboard: React.FC<ScoreboardProps> = ({ scores, setStartTime }) => {
   const topScores = scores.sort((a, b) => b.score - a.score).slice(0, 10);
 
   return (
-    <div className="max-w-xs my-0 mr-0 ml-32 p-4 bg-white rounded-lg shadow-lg">
-      <h1 className="text-3xl font-bold text-center mb-4">Tile Match Game</h1>
+    <div className="max-w-xs my-0 mr-0 ml-32 p-4 bg-white text-black rounded-lg shadow-lg">
+      <h1 className="text-3xl font-bold text-center mb-4 ">Tile Match Game</h1>
       <div className="border-t-2 border-b-2 border-gray-200 py-2">
         <h3 className="text-center text-2xl font-bold mb-2 underline">
           Scoreboard
