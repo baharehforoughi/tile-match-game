@@ -28,14 +28,30 @@ export default function MemoryGame({ onGameWin }: MemoryGameProps) {
   const [flipped, setFlipped] = React.useState<number[]>([]);
   const [solved, setSolved] = React.useState<number[]>([]);
   const [gameStarted, setGameStarted] = useState(false);
+  const [stopwatchRunning, setStopwatchRunning] = useState(false);
+  // const [gameIsOver, setGameIsOver] = useState(false);
 
   const gameOver = solved.length === cards.length;
+  const [startTime, setStartTime] = useState(0);
+
+  // if (gameOver) setGameIsOver(true);
 
   useEffect(() => {
     if (gameOver) {
       onGameWin();
     }
   }, [gameOver, onGameWin]);
+
+  useEffect(() => {
+    if (stopwatchRunning && gameOver) {
+      const interval = setInterval(() => {
+        // Update startTime every second
+        setStartTime((prevStartTime) => prevStartTime + 1);
+      }, 1000);
+      setStopwatchRunning(false);
+      return () => clearInterval(interval);
+    }
+  }, [stopwatchRunning, gameOver]);
 
   useEffect(() => {
     const checkForMatch = () => {
@@ -62,6 +78,8 @@ export default function MemoryGame({ onGameWin }: MemoryGameProps) {
     setFlipped(allIndices);
     setTimeout(() => {
       setFlipped([]);
+      setStopwatchRunning(true);
+      setStartTime(Date.now());
     }, 2000);
     setGameStarted(true);
   };
@@ -71,11 +89,19 @@ export default function MemoryGame({ onGameWin }: MemoryGameProps) {
     setFlipped([]);
     setSolved([]);
     setGameStarted(false);
+    setStartTime(0);
+    setStopwatchRunning(false);
   };
 
   return (
     <div className="text-center user-select-none select-none ">
-      {gameOver && <h2 className="p-5">You WON!</h2>}
+      {gameOver}
+      <Stopwatch
+        key={gameStarted ? "running" : "stopped"}
+        isRunning={stopwatchRunning}
+        startTime={startTime}
+      />
+
       <div className="grid grid-cols-4 gap-5 mt-5 bg-gray-300 p-5">
         {cards.map((card, index) => (
           <div
