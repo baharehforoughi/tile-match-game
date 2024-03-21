@@ -110,18 +110,23 @@ export default function MemoryGame({
           </div>
         ))}
       </div>
-      <button onClick={resetGame} className="p-2 bg-slate-200 rounded-md">
-        Restart
-      </button>
-      <button
-        onClick={startGame}
-        className={`p-2 bg-slate-200 rounded-md ${
-          gameStarted ? "opacity-50 cursor-not-allowed" : ""
-        }`}
-        disabled={gameStarted}
-      >
-        Start Game
-      </button>
+      <div>
+        <button
+          onClick={resetGame}
+          className="p-2 bg-slate-200 rounded-md mr-4"
+        >
+          Restart
+        </button>
+        <button
+          onClick={startGame}
+          className={`p-2 bg-slate-200 rounded-md ${
+            gameStarted ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={gameStarted}
+        >
+          Start Game
+        </button>
+      </div>
     </div>
   );
 }
