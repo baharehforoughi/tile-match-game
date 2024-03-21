@@ -1,47 +1,35 @@
-"use client";
-
-import { useState, useRef, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 interface StopwatchProps {
   isRunning: boolean;
-  startTime: number;
+  resetSignal: number;
 }
 
-const StopWatch: React.FC<StopwatchProps> = ({ isRunning, startTime }) => {
+const StopWatch: React.FC<StopwatchProps> = ({ isRunning, resetSignal }) => {
   const [time, setTime] = useState<number>(0);
-  // const [isRunning, setIsRunning] = useState<boolean>(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    if (!isRunning) {
+      setTime(0); // Reset time when not running
+    }
+  }, [isRunning]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+
     if (isRunning) {
-      // const startTime = Date.now() - time;
-      const timer = setInterval(() => {
+      const startTime = Date.now() - time;
+      interval = setInterval(() => {
         setTime(Date.now() - startTime);
       }, 10);
-
-      return () => clearInterval(timer);
-    } else {
-      clearInterval(intervalRef.current!);
+    } else if (!isRunning && interval) {
+      clearInterval(interval);
     }
-  }, [isRunning, startTime]);
 
-  // const startStopwatch = () => {
-  //   if (isRunning) {
-  //     clearInterval(intervalRef.current!);
-  //   } else {
-  //     const startTime = Date.now() - time;
-  //     intervalRef.current = setInterval(() => {
-  //       setTime(Date.now() - startTime);
-  //     }, 10);
-  //   }
-  //   setIsRunning(!isRunning);
-  // };
-
-  // const resetStopwatch = () => {
-  //   clearInterval(intervalRef.current!);
-  //   setTime(0);
-  //   setIsRunning(false);
-  // };
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isRunning, time]);
 
   const formatTime = (milliseconds: number): string => {
     const pad = (num: number, size: number) => ("000" + num).slice(size * -1);

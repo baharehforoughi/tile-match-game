@@ -1,33 +1,32 @@
-//GameWinPopup.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface GameWinPopupProps {
   score: number;
-  onNameSubmit: (name: string, endTime: Date) => void; // Adjust this line
-  isVisible: boolean;
+  onNameSubmit: (name: string, score: number) => void;
   onHide: () => void;
 }
 
 const GameWinPopup: React.FC<GameWinPopupProps> = ({
   score,
   onNameSubmit,
-  isVisible,
   onHide,
 }) => {
-  const [name, setName] = useState("");
+  const [name, setName] = useState<string>("");
 
-  const handleSubmit = (event: React.FormEvent) => {
+  useEffect(() => {
+    console.log("GameWinPopup mounted");
+    return () => console.log("GameWinPopup unmounted");
+  }, []);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    onNameSubmit(name, new Date()); // Pass new Date() as endTime
+    onNameSubmit(name, score); // This calls the parent's method
+    console.log("onNameSubmit called"); // Debugging log
     onHide();
   };
 
-  if (!isVisible) return null;
-
   return (
-    // Backdrop
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      {/* For the popup Container */}
       <div className="bg-white p-6 rounded-lg shadow-lg z-10">
         <h3 className="text-xl font-bold text-center mb-4">
           Congratulations! 🏆 You have won!
@@ -56,4 +55,5 @@ const GameWinPopup: React.FC<GameWinPopupProps> = ({
     </div>
   );
 };
+
 export default GameWinPopup;

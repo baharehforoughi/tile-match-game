@@ -1,8 +1,7 @@
 "use client";
 import Image from "next/image";
-
 import React, { useState, useEffect } from "react";
-import Stopwatch from "@/components/Stopwatch";
+import Stopwatch from "./Stopwatch"; // Assuming you have a Stopwatch component
 
 const generateDeck = () => {
   const memoryCards = [
@@ -21,51 +20,26 @@ const generateDeck = () => {
 
 interface MemoryGameProps {
   onGameWin: () => void;
+  setStartTime: (date: Date | null) => void; // Function to set the start time in the parent component
 }
 
-export default function MemoryGame({ onGameWin }: MemoryGameProps) {
-  const [cards, setCards] = React.useState<string[]>(generateDeck());
-  const [flipped, setFlipped] = React.useState<number[]>([]);
-  const [solved, setSolved] = React.useState<number[]>([]);
+export default function MemoryGame({
+  onGameWin,
+  setStartTime,
+}: MemoryGameProps) {
+  const [cards, setCards] = useState<string[]>(generateDeck());
+  const [flipped, setFlipped] = useState<number[]>([]);
+  const [solved, setSolved] = useState<number[]>([]);
   const [gameStarted, setGameStarted] = useState(false);
   const [stopwatchRunning, setStopwatchRunning] = useState(false);
-  // const [gameIsOver, setGameIsOver] = useState(false);
-
-  const gameOver = solved.length === cards.length;
-  const [startTime, setStartTime] = useState(0);
-
-  // if (gameOver) setGameIsOver(true);
+  const [resetStopwatchCounter, setResetStopwatchCounter] = useState(0);
 
   useEffect(() => {
-    if (gameOver) {
+    if (solved.length === cards.length && cards.length > 0) {
       onGameWin();
-    }
-  }, [gameOver, onGameWin]);
-
-  useEffect(() => {
-    if (stopwatchRunning && gameOver) {
-      const interval = setInterval(() => {
-        // Update startTime every second
-        setStartTime((prevStartTime) => prevStartTime + 1);
-      }, 1000);
       setStopwatchRunning(false);
-      return () => clearInterval(interval);
     }
-  }, [stopwatchRunning, gameOver]);
-
-  useEffect(() => {
-    const checkForMatch = () => {
-      const [first, second] = flipped;
-      if (cards[first] === cards[second]) {
-        setSolved((prevSolved) => [...prevSolved, first, second]);
-      }
-      setFlipped([]);
-    };
-
-    if (flipped.length === 2) {
-      setTimeout(checkForMatch, 1000);
-    }
-  }, [cards, flipped, solved]);
+  }, [solved, cards.length, onGameWin]);
 
   const handleClick = (index: number) => {
     if (!flipped.includes(index) && flipped.length < 2) {
@@ -74,12 +48,11 @@ export default function MemoryGame({ onGameWin }: MemoryGameProps) {
   };
 
   const startGame = () => {
-    const allIndices = Array.from(Array(cards.length).keys());
-    setFlipped(allIndices);
+    setFlipped(Array.from(Array(cards.length).keys()));
     setTimeout(() => {
       setFlipped([]);
       setStopwatchRunning(true);
-      setStartTime(Date.now());
+      setStartTime(new Date()); // Sets the start time in the parent component (game.tsx)
     }, 2000);
     setGameStarted(true);
   };
@@ -89,36 +62,47 @@ export default function MemoryGame({ onGameWin }: MemoryGameProps) {
     setFlipped([]);
     setSolved([]);
     setGameStarted(false);
-    setStartTime(0);
     setStopwatchRunning(false);
+    setStartTime(null);
+    setResetStopwatchCounter((prev) => prev + 1); // Increment the reset counter to signal a reset
   };
 
-  return (
-    <div className="text-center user-select-none select-none ">
-      {gameOver}
-      <Stopwatch
-        key={gameStarted ? "running" : "stopped"}
-        isRunning={stopwatchRunning}
-        startTime={startTime}
-      />
+  useEffect(() => {
+    const checkForMatch = () => {
+      const [first, second] = flipped;
+      if (cards[first] === cards[second]) {
+        setSolved((prev) => [...prev, first, second]);
+      }
+      setTimeout(() => setFlipped([]), 1000);
+    };
 
+    if (flipped.length === 2) {
+      checkForMatch();
+    }
+  }, [flipped, cards]);
+
+  return (
+    <div className="text-center user-select-none select-none">
+      <Stopwatch
+        isRunning={stopwatchRunning}
+        resetSignal={resetStopwatchCounter}
+      />
       <div className="grid grid-cols-4 gap-5 mt-5 bg-gray-300 p-5">
         {cards.map((card, index) => (
           <div
-            className={`flex justify-center items-center text-4xl font-bold text-black bg-white w-28 h-28 transform cursor-pointer transition-transform duration-300 ${
+            key={index}
+            className={`flex justify-center items-center text-4xl font-bold text-black bg-white w-28 h-28 transform cursor-pointer ${
               flipped.includes(index) || solved.includes(index)
                 ? "rotate-180"
                 : ""
-            }`}
-            key={index}
+            } transition-transform duration-300`}
             onClick={() => handleClick(index)}
           >
             {flipped.includes(index) || solved.includes(index) ? (
               <Image
-                className="rotate-180"
                 src={`/memory_card/${card}.png`}
-                fill
                 alt="Memory Card"
+                layout="fill"
               />
             ) : (
               " "
@@ -126,15 +110,12 @@ export default function MemoryGame({ onGameWin }: MemoryGameProps) {
           </div>
         ))}
       </div>
-      <button
-        onClick={resetGame}
-        className="p-2 bg-slate-200 rounded-md mt-5 mr-5"
-      >
+      <button onClick={resetGame} className="p-2 bg-slate-200 rounded-md">
         Restart
       </button>
       <button
         onClick={startGame}
-        className={`p-2 bg-slate-200 rounded-md mt-5 ${
+        className={`p-2 bg-slate-200 rounded-md ${
           gameStarted ? "opacity-50 cursor-not-allowed" : ""
         }`}
         disabled={gameStarted}
