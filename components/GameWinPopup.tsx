@@ -21,6 +21,25 @@ const GameWinPopup: React.FC<GameWinPopupProps> = ({
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     onNameSubmit(name, score); // This calls the parent's method
+    const data = {
+      name: name,
+      score: score,
+    };
+
+    fetch("http://localhost:3000/api/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
     console.log("onNameSubmit called"); // Debugging log
     onHide();
   };
