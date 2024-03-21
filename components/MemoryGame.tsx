@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import Stopwatch from "./Stopwatch"; // Assuming you have a Stopwatch component
+import Stopwatch from "./Stopwatch";
 
 const generateDeck = () => {
   const memoryCards = [
