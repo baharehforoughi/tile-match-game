@@ -65,21 +65,25 @@ const GamePage = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 p-4 user-select-none select-none">
-      <div className="bg-white p-8 rounded-lg shadow-md flex flex-col items-center space-y-4">
-        <div className="flex justify-start space-x-2">
-          <Stopwatch />
+      <div className="flex justify-between container mx-auto p-4 bg-white rounded-lg shadow-md">
+        <div className="flex flex-col items-start space-y-4">
+          <div className="container">
+            <MemoryGame onGameWin={() => setShowPopup(true)} />
+          </div>
+        </div>
+
+        <div className="flex flex-col items-end space-y-4">
           <Scoreboard scores={scores} />
-        </div>
-        <div className="container">
-          <MemoryGame onGameWin={handleGameWin} />
-        </div>
-        <div>
-          {showPopup && (
-            <GameWinPopup
-              score={score}
-              onNameSubmit={(name) => updateScores(name, score)}
-            />
-          )}
+          <div>
+            {showPopup && (
+              <GameWinPopup
+                score={score}
+                onNameSubmit={handleNameSubmit}
+                isVisible={showPopup}
+                onHide={() => setShowPopup(false)}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>
