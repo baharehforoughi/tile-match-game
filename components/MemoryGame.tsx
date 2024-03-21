@@ -110,7 +110,7 @@ export default function MemoryGame({
           </div>
         ))}
       </div>
-      <div>
+      <div className="mt-4">
         <button
           onClick={resetGame}
           className="p-2 bg-slate-200 rounded-md mr-4"
