@@ -82,7 +82,7 @@ export default function MemoryGame({
   }, [flipped, cards]);
 
   return (
-    <div className="text-center user-select-none select-none">
+    <div className="text-center text-black user-select-none select-none">
       <Stopwatch
         isRunning={stopwatchRunning}
         resetSignal={resetStopwatchCounter}
