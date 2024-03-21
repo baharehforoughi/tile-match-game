@@ -30,18 +30,6 @@ const GamePage = () => {
     }
   }, [startTime]);
 
-  //not needed - remove : Found in MemoryGame.tsx
-  // const startGame = () => {
-  //   const start = new Date();
-  //   setIsGameActive(true);
-  //   setStartTime(new Date());
-  // };
-
-  // const resetGame = () => {
-  //   setIsGameActive(false);
-  //   // Reset game logic
-  // };
-
   const handleNameSubmit = useCallback((name: string, score: number) => {
     const newScoreEntry = { name, score };
     setScores((prevScores) =>
@@ -72,5 +60,4 @@ const GamePage = () => {
     </div>
   );
 };
-
 export default GamePage;
