@@ -47,7 +47,8 @@ const GamePage = () => {
           </div>
         </div>
         <div className="flex flex-col items-end space-y-4">
-          <Scoreboard scores={scores} setStartTime={setStartTime} />
+          {/* <Scoreboard scores={scores} setStartTime={setStartTime} /> */}
+          <Scoreboard setStartTime={setStartTime} />
           {showPopup && (
             <GameWinPopup
               score={score}
